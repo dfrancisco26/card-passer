@@ -3,9 +3,14 @@ import initialCards from './cards-data';
 
 const GameContext = createContext();
 
+export function findCardIndex(value, suit, cards) {
+  return cards.findIndex(card => card.value === value && card.suit === suit);
+}
+
 export function GameProvider({ children }) {
 
   const initialCards = { initialCards };
+
   const stateAndSetters = {
     deck, setDeck,
     playerOneHand, setPlayerOneHand,
@@ -23,9 +28,11 @@ export function GameProvider({ children }) {
   const [from, setFrom] = useState('deck');
   const [to, setTo] = useState(1);
     
-  function findCardIndex(value, suit, cards) {
-    return cards.findIndex(card => card.value === value && card.suit === suit);
-  }
+  return <GameContext.Provider value={stateAndSetters}>
+    {children}
+  </GameContext.Provider>;
+}
 
-
+export function useGameContext() {
+  return useContext(GameContext);
 }
